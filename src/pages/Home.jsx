@@ -30,13 +30,14 @@ const Home = () => {
   return (
     <>
       <Row>
-        <Col span={16} style={{ padding: "50px" }}>
+        <Col span={16}>
           <div
             style={{
               display: "flex",
               justifyContent: "space-between",
               alignItems: "center",
-              //   padding: "50px",
+              height: "20vh",
+              padding: "0px 4vw",
             }}
           >
             <img
@@ -50,8 +51,7 @@ const Home = () => {
               placeholder="Enter Check Number..."
             />
           </div>
-
-          <Row gutter={16} style={{ marginTop: "10vh" }}>
+          <Row gutter={16} style={{ padding: "0px 4vw", height: "3vh" }}>
             <Col span={12}>
               <div
                 style={{
@@ -62,6 +62,25 @@ const Home = () => {
               >
                 Checks To Cash
               </div>
+            </Col>
+            <Col span={12}>
+              <div
+                style={{
+                  fontSize: "18px",
+                  color: "#3B3B3B",
+                  fontWeight: "bold",
+                }}
+              >
+                Checks To Sign
+              </div>
+            </Col>
+          </Row>
+          <Row gutter={16} style={{ padding: "0px 4vw" }}>
+            <Col
+              span={12}
+              className="white-scroll"
+              style={{ height: "75vh", overflowY: "scroll" }}
+            >
               {sender.map((item) => {
                 return (
                   <div style={{ marginTop: "20px" }}>
@@ -88,16 +107,11 @@ const Home = () => {
                 );
               })}
             </Col>
-            <Col span={12}>
-              <div
-                style={{
-                  fontSize: "18px",
-                  color: "#3B3B3B",
-                  fontWeight: "bold",
-                }}
-              >
-                Checks To Sign
-              </div>
+            <Col
+              span={12}
+              className="white-scroll"
+              style={{ height: "75vh", overflowY: "scroll" }}
+            >
               {receiver.map((item) => {
                 return (
                   <div style={{ marginTop: "20px" }}>
