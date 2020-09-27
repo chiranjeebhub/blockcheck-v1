@@ -1,8 +1,10 @@
+import React, { useEffect, useState, useRef } from "react";
 import { Card, Col, Input, Row } from "antd";
 import Axios from "axios";
-import React, { useEffect, useState } from "react";
+import Loading from "../lotties/LoadingAnimation";
 
 const Home = () => {
+  const chkNumberRef = useRef();
   const [coins, setCoins] = useState([]);
   const [list, setList] = useState([
     { name: "blah", price: "0.98" },
@@ -13,6 +15,24 @@ const Home = () => {
   const [sender, setSender] = useState([]);
   const [receiver, setReceiver] = useState([]);
   const [isCash, setIsCash] = useState(true);
+  const [showInput, setShowInput] = useState(false);
+  const [lottiLoading, setLottiLoading] = useState(false);
+  const [showTracking, setShowTracking] = useState(false);
+
+  useEffect(() => {
+    if (showInput) {
+      chkNumberRef.current.focus();
+    }
+  }, [showInput]);
+
+  useEffect(() => {
+    if (lottiLoading) {
+      setTimeout(() => {
+        setLottiLoading(false);
+        setShowTracking(true);
+      }, 2000);
+    }
+  }, [lottiLoading]);
 
   useEffect(() => {
     Axios.get(
@@ -26,7 +46,265 @@ const Home = () => {
     ).then((res) => {
       setSender(res.data.bcrs);
     });
-  });
+  }, []);
+
+  const handleShowSection = () => {
+    if (lottiLoading) {
+      return <Loading />;
+    } else {
+      if (showInput && !showTracking) {
+        return (
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              height: "100vh",
+            }}
+          >
+            <div
+              style={{
+                textAlign: "center",
+                padding: "0px 50px",
+                paddingTop: "50px",
+              }}
+            >
+              <img
+                src={require("../images/logo_blue.svg")}
+                alt=""
+                width="250px"
+              />
+              <p
+                style={{
+                  color: "#186AB4",
+                  padding: "20px",
+                  textAlign: "center",
+                  fontSize: "18px",
+                }}
+              >
+                Enter The Check Number To Open Up The CheckBook.
+              </p>
+            </div>
+
+            <Row style={{ width: "100%", padding: "30px" }}>
+              <Col
+                span={16}
+                //   style={{ border: "solid 0.5px #EBEBEB", padding: "20px" }}
+              >
+                <Input
+                  ref={chkNumberRef}
+                  // value={slideName}
+                  // onChange={(e) => setSlideName(e.target.value)}
+                  placeholder="Enter Check Number"
+                  style={{
+                    borderRadius: "0px",
+                    border: "none !important",
+                    outline: "none !important",
+                    height: "54px",
+                  }}
+                />
+              </Col>
+              <Col
+                span={4}
+                style={{
+                  border: "solid 1px #EBEBEB",
+                  borderWidth: "1px 1px 1px 0px",
+                  height: "54px",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
+                <img src={require("../images/paste.svg")} alt="" width="20px" />
+              </Col>
+              <Col
+                onClick={(e) => setLottiLoading(true)}
+                span={4}
+                style={{
+                  border: "solid 0.5px #EBEBEB",
+                  height: "54px",
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  backgroundColor: "#186AB4",
+                }}
+              >
+                <img src={require("../images/go.svg")} alt="" width="20px" />
+              </Col>
+            </Row>
+          </div>
+        );
+      } else if (!showInput && !showTracking) {
+        return (
+          <>
+            <div
+              style={{
+                textAlign: "center",
+                padding: "0px 50px",
+                paddingTop: "50px",
+              }}
+            >
+              <img
+                src={require("../images/logo_blue.svg")}
+                alt=""
+                width="250px"
+              />
+              <p
+                style={{
+                  color: "#186AB4",
+                  padding: "20px",
+                  textAlign: "center",
+                  fontSize: "18px",
+                }}
+              >
+                The Safest Way To Receive Crypto From An External Wallet
+              </p>
+              <div
+                onClick={(e) => setShowInput(true)}
+                style={{
+                  padding: "20px",
+                  textAlign: "center",
+                  border: "solid 0.5px #186AB4",
+                  width: "100%",
+                  fontSize: "18px",
+                  fontWeight: "bold",
+                  color: "#186AB4",
+                  marginTop: "15px",
+                  cursor: "pointer",
+                  background: "white",
+                }}
+              >
+                Enter Check Number
+              </div>
+
+              <div
+                style={{
+                  fontSize: "20px",
+                  color: "#186AB4",
+                  fontWeight: "700",
+                  paddingTop: "10px",
+                }}
+              >
+                OR
+              </div>
+              <div
+                style={{
+                  padding: "20px",
+                  textAlign: "center",
+                  border: "solid 0.5px #186AB4",
+                  width: "100%",
+                  fontSize: "18px",
+                  fontWeight: "bold",
+                  color: "white",
+                  marginTop: "15px",
+                  cursor: "pointer",
+                  background: "#186AB4",
+                }}
+              >
+                Scan The Check
+              </div>
+
+              <br />
+            </div>
+            <div style={{ padding: "20px", paddingBottom: "10px" }}>
+              {isCash ? (
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    fontSize: "23px",
+                    fontWeight: "700",
+                  }}
+                >
+                  <p
+                    style={{ color: "#186AB4", cursor: "pointer" }}
+                    onClick={(e) => setIsCash(true)}
+                  >
+                    Cash Checks
+                  </p>
+                  <p
+                    style={{ color: "lightgray", cursor: "pointer" }}
+                    onClick={(e) => setIsCash(false)}
+                  >
+                    Sign
+                  </p>
+                </div>
+              ) : (
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    fontSize: "23px",
+                    fontWeight: "700",
+                  }}
+                >
+                  <p
+                    style={{ color: "#186AB4", cursor: "pointer" }}
+                    onClick={(e) => setIsCash(false)}
+                  >
+                    Sign Checks
+                  </p>
+                  <p
+                    style={{ color: "lightgray", cursor: "pointer" }}
+                    onClick={(e) => setIsCash(true)}
+                  >
+                    Cash
+                  </p>
+                </div>
+              )}
+            </div>
+            {isCash ? (
+              <div style={{ padding: "20px", paddingTop: "0px" }}>
+                {sender.map((item) => {
+                  return (
+                    <div
+                      style={{
+                        padding: "20px",
+                        display: "flex",
+                        justifyContent: "space-between",
+                        alignItems: "center",
+                        border: "solid 0.5px #EBEBEB",
+                        marginBottom: "10px",
+                      }}
+                    >
+                      <div>{item.coin}</div>
+                      <div>{item.amount}</div>
+                    </div>
+                  );
+                })}
+              </div>
+            ) : (
+              <div style={{ padding: "20px", paddingTop: "0px" }}>
+                {receiver.map((item) => {
+                  return (
+                    <div
+                      style={{
+                        padding: "20px",
+                        display: "flex",
+                        justifyContent: "space-between",
+                        alignItems: "center",
+                        border: "solid 0.5px #EBEBEB",
+                        marginBottom: "10px",
+                      }}
+                    >
+                      <div>{item.coin}</div>
+                      <div>{item.amount}</div>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+          </>
+        );
+      } else if (showTracking) {
+        return (
+          <div>
+            <p>this is tracking...</p>
+          </div>
+        );
+      }
+    }
+  };
 
   return (
     <>
@@ -197,160 +475,7 @@ const Home = () => {
           </Col>
         </Row>
       ) : (
-        <>
-          <div
-            style={{
-              textAlign: "center",
-              padding: "0px 50px",
-              paddingTop: "50px",
-            }}
-          >
-            <img
-              src={require("../images/logo_blue.svg")}
-              alt=""
-              width="250px"
-            />
-            <p
-              style={{
-                color: "#186AB4",
-                padding: "20px",
-                textAlign: "center",
-                fontSize: "18px",
-              }}
-            >
-              The Safest Way To Receive Crypto From An External Wallet
-            </p>
-            <Input
-              // value={buttonText}
-              // onChange={(e) => setButtonText(e.target.value)}
-              placeholder="Enter Check Number"
-              style={{
-                backgroundColor: "white",
-                color: "#186AB4",
-                border: "none !important",
-                outline: "none",
-                textAlign: "center",
-                padding: "30px",
-                fontSize: "18px",
-              }}
-            />
-            <div
-              style={{
-                fontSize: "20px",
-                color: "#186AB4",
-                fontWeight: "700",
-                paddingTop: "10px",
-              }}
-            >
-              OR
-            </div>
-            <div
-              style={{
-                padding: "20px",
-                textAlign: "center",
-                border: "solid 0.5px #186AB4",
-                width: "100%",
-                fontSize: "18px",
-                fontWeight: "bold",
-                color: "white",
-                marginTop: "15px",
-                cursor: "pointer",
-                background: "#186AB4",
-              }}
-            >
-              Scan The Check
-            </div>
-            <br />
-          </div>
-          <div style={{ padding: "20px", paddingBottom: "10px" }}>
-            {isCash ? (
-              <div
-                style={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  fontSize: "23px",
-                  fontWeight: "700",
-                }}
-              >
-                <p
-                  style={{ color: "#186AB4", cursor: "pointer" }}
-                  onClick={(e) => setIsCash(true)}
-                >
-                  Cash Checks
-                </p>
-                <p
-                  style={{ color: "lightgray", cursor: "pointer" }}
-                  onClick={(e) => setIsCash(false)}
-                >
-                  Sign
-                </p>
-              </div>
-            ) : (
-              <div
-                style={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  fontSize: "23px",
-                  fontWeight: "700",
-                }}
-              >
-                <p
-                  style={{ color: "#186AB4", cursor: "pointer" }}
-                  onClick={(e) => setIsCash(false)}
-                >
-                  Sign Checks
-                </p>
-                <p
-                  style={{ color: "lightgray", cursor: "pointer" }}
-                  onClick={(e) => setIsCash(true)}
-                >
-                  Cash
-                </p>
-              </div>
-            )}
-          </div>
-          {isCash ? (
-            <div style={{ padding: "20px", paddingTop: "0px" }}>
-              {sender.map((item) => {
-                return (
-                  <div
-                    style={{
-                      padding: "20px",
-                      display: "flex",
-                      justifyContent: "space-between",
-                      alignItems: "center",
-                      border: "solid 0.5px #EBEBEB",
-                      marginBottom: "10px",
-                    }}
-                  >
-                    <div>{item.coin}</div>
-                    <div>{item.amount}</div>
-                  </div>
-                );
-              })}
-            </div>
-          ) : (
-            <div style={{ padding: "20px", paddingTop: "0px" }}>
-              {receiver.map((item) => {
-                return (
-                  <div
-                    style={{
-                      padding: "20px",
-                      display: "flex",
-                      justifyContent: "space-between",
-                      alignItems: "center",
-                      border: "solid 0.5px #EBEBEB",
-                      marginBottom: "10px",
-                    }}
-                  >
-                    <div>{item.coin}</div>
-                    <div>{item.amount}</div>
-                  </div>
-                );
-              })}
-            </div>
-          )}
-        </>
+        <>{handleShowSection()}</>
       )}
     </>
   );
