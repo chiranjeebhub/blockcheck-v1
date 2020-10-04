@@ -600,7 +600,8 @@ const Home = () => {
                       </div>
 
                       <div
-                        onClick={(e) => dummyFun(item._id)}
+                        // onClick={(e) => dummyFun(item._id)}
+                        onClick={(e) => history.push(`/checks/${item._id}`)}
                         style={{
                           width: "100%",
                           padding: "20px",
@@ -633,7 +634,8 @@ const Home = () => {
                       </div>
 
                       <div
-                        onClick={(e) => dummyFun(item._id)}
+                        // onClick={(e) => dummyFun(item._id)}
+                        onClick={(e) => history.push(`/checks/${item._id}`)}
                         style={{
                           width: "100%",
                           padding: "20px",
