@@ -1,10 +1,23 @@
 import React, { useEffect, useState, useRef } from "react";
-import { Alert, Avatar, Button, Card, Col, Input, message, Row } from "antd";
+import {
+  Alert,
+  Avatar,
+  Button,
+  Card,
+  Col,
+  Icon,
+  Input,
+  message,
+  Row,
+  Tooltip,
+} from "antd";
 import Axios from "axios";
 import Loading from "../lotties/LoadingAnimation";
+import { Link, useHistory } from "react-router-dom";
 
 const Home = () => {
   const chkNumberRef = useRef();
+  const history = useHistory();
   const [coins, setCoins] = useState([]);
   const [list, setList] = useState([
     { name: "blah", price: "0.98" },
@@ -25,6 +38,8 @@ const Home = () => {
   const [query, setQuery] = useState("");
   const [selectedCheck, setSelectedCheck] = useState(null);
   const [trackingDataDesktop, setTrackingDataDesktop] = useState([]);
+
+  const [allCoins, setAllCoins] = useState([]);
 
   useEffect(() => {
     if (showInput) {
@@ -55,11 +70,36 @@ const Home = () => {
     ).then((res) => {
       setAllChecks(res.data.bcrs);
     });
+
+    Axios.get(`https://comms.globalxchange.com/coin/vault/get/all/coins`).then(
+      (res) => {
+        setAllCoins(res.data.coins);
+      }
+    );
   }, []);
+
+  const dummyFun = (item) => {
+    setLottiLoading(true);
+    // console.log(chkNumberRef.current.state.value);
+    Axios.get(
+      `https://comms.globalxchange.com/coin/vault/service/blockcheck/request/get?_id=${item}`
+    ).then((res) => {
+      if (res.data.status) {
+        setTrackingData(res.data.bcrs);
+        setLottiLoading(false);
+        setShowTracking(true);
+      } else {
+        setLottiLoading(false);
+        message.error("Tracking Details could not be fetched");
+        setMyError(true);
+        setCheckNumber("");
+      }
+    });
+  };
 
   const getTrackingData = () => {
     setLottiLoading(true);
-    console.log(chkNumberRef.current.state.value);
+    // console.log(chkNumberRef.current.state.value);
     Axios.get(
       `https://comms.globalxchange.com/coin/vault/service/blockcheck/request/get?_id=${checkNumber}`
     ).then((res) => {
@@ -96,6 +136,22 @@ const Home = () => {
     });
   };
 
+  const getTrackingDataDesktop1 = () => {
+    setLottiLoading(true);
+
+    Axios.get(
+      `https://comms.globalxchange.com/coin/vault/service/blockcheck/request/get?_id=${checkNumber}`
+    ).then((res) => {
+      if (res.data.status) {
+        setTrackingDataDesktop(res.data.bcrs);
+
+        // // setLottiLoading(false);
+        // // setShowTracking(true);
+        // showTrackingDataDesktop();
+      }
+    });
+  };
+
   const showTrackingData = () => {
     console.log(trackingData[0], "trackingdata");
     if (trackingData.length > 0) {
@@ -121,7 +177,7 @@ const Home = () => {
               <img
                 src={require("../images/logo_blue.svg")}
                 alt=""
-                width="250px"
+                width="200px"
               />
             </div>
           </div>
@@ -536,41 +592,67 @@ const Home = () => {
               )}
             </div>
             {isCash ? (
-              <div style={{ padding: "20px", paddingTop: "0px" }}>
+              <div
+                style={{
+                  padding: "20px",
+                  paddingTop: "0px",
+                  height: "30vh",
+                  overflowY: "scroll",
+                }}
+              >
                 {sender.map((item) => {
                   return (
-                    <div
-                      style={{
-                        padding: "20px",
-                        display: "flex",
-                        justifyContent: "space-between",
-                        alignItems: "center",
-                        border: "solid 0.5px #EBEBEB",
-                        marginBottom: "10px",
-                      }}
-                    >
-                      <div>{item.coin}</div>
-                      <div>{item.amount}</div>
+                    <div style={{ display: "flex", marginBottom: "15px" }}>
+                      <div style={{ background: "#186AB4", width: "15px" }}>
+                        &nbsp;
+                      </div>
+
+                      <div
+                        onClick={(e) => dummyFun(item._id)}
+                        style={{
+                          width: "100%",
+                          padding: "20px",
+                          display: "flex",
+                          justifyContent: "space-between",
+                          alignItems: "center",
+                          border: "solid 0.5px #EBEBEB",
+                        }}
+                      >
+                        {showCardData(item)}
+                      </div>
                     </div>
                   );
                 })}
               </div>
             ) : (
-              <div style={{ padding: "20px", paddingTop: "0px" }}>
+              <div
+                style={{
+                  padding: "20px",
+                  paddingTop: "0px",
+                  height: "30vh",
+                  overflowY: "scroll",
+                }}
+              >
                 {receiver.map((item) => {
                   return (
-                    <div
-                      style={{
-                        padding: "20px",
-                        display: "flex",
-                        justifyContent: "space-between",
-                        alignItems: "center",
-                        border: "solid 0.5px #EBEBEB",
-                        marginBottom: "10px",
-                      }}
-                    >
-                      <div>{item.coin}</div>
-                      <div>{item.amount}</div>
+                    <div style={{ display: "flex", marginBottom: "15px" }}>
+                      <div style={{ background: "#3B3B3B", width: "15px" }}>
+                        &nbsp;
+                      </div>
+
+                      <div
+                        onClick={(e) => dummyFun(item._id)}
+                        style={{
+                          width: "100%",
+                          padding: "20px",
+                          display: "flex",
+                          justifyContent: "space-between",
+                          alignItems: "center",
+                          border: "solid 0.5px #EBEBEB",
+                        }}
+                      >
+                        {showCardData(item)}
+                      </div>
                     </div>
                   );
                 })}
@@ -602,7 +684,7 @@ const Home = () => {
               style={{ cursor: "pointer" }}
               src={require("../images/back.svg")}
               alt=""
-              width="30px"
+              width="20px"
               onClick={(e) => setTrackingDataDesktop([])}
             />
             &nbsp;&nbsp; &nbsp;&nbsp;
@@ -610,7 +692,20 @@ const Home = () => {
               <img
                 src={require("../images/logo_blue.svg")}
                 alt=""
-                width="250px"
+                width="200px"
+              />
+            </div>
+            &nbsp;&nbsp;&nbsp;&nbsp;
+            <div
+              onClick={(e) => {
+                history.push(`/checks/${trackingDataDesktop[0]._id}`);
+              }}
+            >
+              <img
+                style={{ cursor: "pointer" }}
+                src={require("../images/ext_link.svg")}
+                alt=""
+                width="20px"
               />
             </div>
           </div>
@@ -809,6 +904,43 @@ const Home = () => {
     }
   };
 
+  const showCardData = (item) => {
+    let coinMeta = allCoins.find((o) => o.coinSymbol === item.coin);
+    return (
+      <div
+        style={{
+          display: "flex",
+          width: "100%",
+          padding: "0px 20px",
+          justifyContent: "space-between",
+        }}
+      >
+        <div>
+          <div style={{ display: "flex", alignItems: "center" }}>
+            <img src={coinMeta.coinImage} alt="" width="20px" />
+            &nbsp;&nbsp;
+            <div style={{ fontSize: "20px", fontWeight: "700" }}>
+              {coinMeta.coinName}
+            </div>
+          </div>
+          <div>
+            <small>{new Date(item.date).toDateString()}</small>
+          </div>
+        </div>
+        <div>
+          <div style={{ fontSize: "20px", fontWeight: "700" }}>
+            {item.amount.toFixed(4)}
+          </div>
+          <div>
+            <small>
+              ${(Number(item.amount) * Number(coinMeta.usd_price)).toFixed(2)}
+            </small>
+          </div>
+        </div>
+      </div>
+    );
+  };
+
   return (
     <>
       {window.innerWidth > 600 ? (
@@ -828,16 +960,34 @@ const Home = () => {
                 alt=""
                 width="200px"
               />
+
               <Input
-                size="large"
-                value={query}
-                onChange={(e) => setQuery(e.target.value)}
-                type="text"
-                style={{ width: "300px" }}
-                placeholder="Enter Check Number..."
+                ref={chkNumberRef}
+                value={checkNumber}
+                onChange={(e) => setCheckNumber(e.target.value)}
+                style={{ width: "350px", height: "50px" }}
+                placeholder="Search A Blockcheck Number..."
+                suffix={
+                  <>
+                    <Tooltip title="Paste Check Number">
+                      <Icon
+                        onClick={paste}
+                        type="snippets"
+                        style={{ color: "rgba(0,0,0,.45)", cursor: "pointer" }}
+                      />
+                    </Tooltip>
+                    &nbsp;&nbsp;&nbsp;&nbsp;
+                    <Icon
+                      onClick={getTrackingDataDesktop1}
+                      type="search"
+                      style={{ color: "rgba(0,0,0,.45)", cursor: "pointer" }}
+                    />
+                  </>
+                }
               />
             </div>
-            <Row gutter={16} style={{ padding: "0px 4vw", height: "3vh" }}>
+
+            <Row gutter={20} style={{ padding: "0px 4vw", height: "3vh" }}>
               <Col span={12}>
                 <div
                   style={{
@@ -861,7 +1011,7 @@ const Home = () => {
                 </div>
               </Col>
             </Row>
-            <Row gutter={16} style={{ padding: "0px 4vw" }}>
+            <Row gutter={20} style={{ padding: "0px 4vw" }}>
               <Col
                 span={12}
                 className="white-scroll"
@@ -873,8 +1023,10 @@ const Home = () => {
                       <div
                         onClick={(e) => getTrackingDataDesktop(item)}
                         style={{
-                          cursor: "pointer",
+                          display: "flex",
+                          width: "100%",
                           marginTop: "20px",
+                          cursor: "pointer",
                           opacity: query
                             ? item._id.toLowerCase() === query
                               ? 1
@@ -882,24 +1034,21 @@ const Home = () => {
                             : 1,
                         }}
                       >
-                        <div
-                          style={{
-                            padding: "10px",
-                            background: "#186AB4",
-                            color: "white",
-                            textAlign: "center",
-                          }}
-                        >
-                          {item.amount}
+                        <div style={{ background: "#186AB4", width: "15px" }}>
+                          &nbsp;
                         </div>
                         <div
                           style={{
-                            padding: "20px",
+                            // padding: "40px",
+                            height: "100px",
                             textAlign: "center",
                             border: "solid 1px lightgray",
+                            width: "100%",
+                            display: "flex",
+                            alignItems: "center",
                           }}
                         >
-                          {item.coin}
+                          {showCardData(item)}
                         </div>
                       </div>
                     );
@@ -917,6 +1066,8 @@ const Home = () => {
                       <div
                         onClick={(e) => getTrackingDataDesktop(item)}
                         style={{
+                          display: "flex",
+                          width: "100%",
                           marginTop: "20px",
                           cursor: "pointer",
                           opacity: query
@@ -926,24 +1077,21 @@ const Home = () => {
                             : 1,
                         }}
                       >
-                        <div
-                          style={{
-                            padding: "10px",
-                            background: "#3B3B3B",
-                            color: "white",
-                            textAlign: "center",
-                          }}
-                        >
-                          {item.amount}
+                        <div style={{ background: "#3B3B3B", width: "15px" }}>
+                          &nbsp;
                         </div>
                         <div
                           style={{
-                            padding: "20px",
+                            // padding: "40px",
+                            height: "100px",
                             textAlign: "center",
                             border: "solid 1px lightgray",
+                            width: "100%",
+                            display: "flex",
+                            alignItems: "center",
                           }}
                         >
-                          {item.coin}
+                          {showCardData(item)}
                         </div>
                       </div>
                     );
