@@ -489,6 +489,7 @@ const Home = () => {
               />
               <p
                 style={{
+                  marginBottom: "0px",
                   color: "#186AB4",
                   padding: "20px",
                   textAlign: "center",
@@ -497,51 +498,42 @@ const Home = () => {
               >
                 The Safest Way To Receive Crypto From An External Wallet
               </p>
-              <div
-                onClick={(e) => setShowInput(true)}
-                style={{
-                  padding: "20px",
-                  textAlign: "center",
-                  border: "solid 0.5px #186AB4",
-                  width: "100%",
-                  fontSize: "18px",
-                  fontWeight: "bold",
-                  color: "#186AB4",
-                  marginTop: "15px",
-                  cursor: "pointer",
-                  background: "white",
-                }}
-              >
-                Enter Check Number
+              <div style={{ display: "flex" }}>
+                <div
+                  onClick={(e) => setShowInput(true)}
+                  style={{
+                    padding: "10px",
+                    textAlign: "center",
+                    border: "solid 0.5px #186AB4",
+                    width: "100%",
+                    fontSize: "18px",
+                    fontWeight: "bold",
+                    color: "#186AB4",
+                    marginTop: "15px",
+                    cursor: "pointer",
+                    background: "white",
+                  }}
+                >
+                  Create
+                </div>
+                &nbsp;&nbsp;&nbsp;
+                <div
+                  style={{
+                    padding: "10px",
+                    textAlign: "center",
+                    border: "solid 0.5px #186AB4",
+                    width: "100%",
+                    fontSize: "18px",
+                    fontWeight: "bold",
+                    color: "white",
+                    marginTop: "15px",
+                    cursor: "pointer",
+                    background: "#186AB4",
+                  }}
+                >
+                  Find
+                </div>
               </div>
-
-              <div
-                style={{
-                  fontSize: "20px",
-                  color: "#186AB4",
-                  fontWeight: "700",
-                  paddingTop: "10px",
-                }}
-              >
-                OR
-              </div>
-              <div
-                style={{
-                  padding: "20px",
-                  textAlign: "center",
-                  border: "solid 0.5px #186AB4",
-                  width: "100%",
-                  fontSize: "18px",
-                  fontWeight: "bold",
-                  color: "white",
-                  marginTop: "15px",
-                  cursor: "pointer",
-                  background: "#186AB4",
-                }}
-              >
-                Scan The Check
-              </div>
-
               <br />
             </div>
             <div style={{ padding: "20px", paddingBottom: "10px" }}>
@@ -596,7 +588,7 @@ const Home = () => {
                 style={{
                   padding: "20px",
                   paddingTop: "0px",
-                  height: "30vh",
+                  height: "50vh",
                   overflowY: "scroll",
                 }}
               >
@@ -629,7 +621,7 @@ const Home = () => {
                 style={{
                   padding: "20px",
                   paddingTop: "0px",
-                  height: "30vh",
+                  height: "50vh",
                   overflowY: "scroll",
                 }}
               >

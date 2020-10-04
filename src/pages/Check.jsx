@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { Row, Col, Input, Icon, Tooltip, Card, Avatar } from "antd";
+import { Row, Col, Input, Icon, Tooltip, Card, Avatar, Divider } from "antd";
 import { useHistory } from "react-router-dom";
 import Axios from "axios";
 import Loading from "../lotties/LoadingAnimation";
@@ -12,6 +12,8 @@ const Check = () => {
   const [trackingDataDesktop, setTrackingDataDesktop] = useState([]);
   const [isCash, setIsCash] = useState(true);
   const [checkId, setCheckId] = useState("");
+  const [initiate, setInitiate] = useState(false);
+  const [clearance, setClearance] = useState(false);
 
   useEffect(() => {
     let chkId = window.location.href.split("\\").pop().split("/").pop();
@@ -40,6 +42,38 @@ const Check = () => {
     });
   };
 
+  const conditionalLeftView = () => {
+    if (initiate && !clearance) {
+      return (
+        <div style={{ padding: "30px 50px" }}>
+          <div
+            style={{
+              fontSize: "25px",
+              fontWeight: "bold",
+              color: "#186AB4",
+            }}
+          >
+            Initiation Details
+          </div>
+        </div>
+      );
+    } else if (!initiate && clearance) {
+      return (
+        <div style={{ padding: "30px 50px" }}>
+          <div
+            style={{
+              fontSize: "25px",
+              fontWeight: "bold",
+              color: "#186AB4",
+            }}
+          >
+            Clearence Details
+          </div>
+        </div>
+      );
+    }
+  };
+
   const paste = async (input) => {
     chkNumberRef.current.focus();
     const text = await navigator.clipboard.readText();
@@ -58,7 +92,7 @@ const Check = () => {
               display: "flex",
               alignItems: "center",
               justifyContent: "space-around",
-              // padding: "50px",
+              //   padding: "50px",
               paddingBottom: "10px",
             }}
           >
@@ -89,17 +123,25 @@ const Check = () => {
               display: "flex",
               flexDirection: "column",
               justifyContent: "space-between",
-              height: "82vh",
+              height: "85vh",
             }}
           >
             <div
               style={{
                 paddingTop: "30px",
                 zIndex: 99,
-                width: "25vw",
+                width: window.innerWidth > 600 ? "25vw" : "100%",
               }}
             >
               <Card
+                onClick={(e) => {
+                  setInitiate(!initiate);
+                  setClearance(false);
+                }}
+                style={{
+                  borderColor: initiate ? "#186ab4" : "#ccc",
+                  cursor: "pointer",
+                }}
                 bodyStyle={{
                   display: "flex",
                   alignItems: "center",
@@ -114,6 +156,28 @@ const Check = () => {
                   <small>{trackingDataDesktop[0].date}</small>
                 </div>
               </Card>
+              {initiate ? (
+                <Card
+                  style={{
+                    height: "30vh",
+                    display: window.innerWidth > 600 ? "none" : "block",
+                    borderColor: "#186ab4",
+                    borderWidth: "0px 1px 1px 1px",
+                  }}
+                >
+                  <div
+                    style={{
+                      fontSize: "20px",
+                      fontWeight: "bold",
+                      color: "#186ab4",
+                    }}
+                  >
+                    Initiation Details
+                  </div>
+                </Card>
+              ) : (
+                ""
+              )}
               <br />
               <Card bodyStyle={{ display: "flex", alignItems: "center" }}>
                 <Avatar size="large" />
@@ -137,10 +201,23 @@ const Check = () => {
                 </div>
               </Card>
             </div>
-            <div style={{ zIndex: 99, width: "25vw" }}>
+            <div
+              style={{
+                zIndex: 99,
+                width: window.innerWidth > 600 ? "25vw" : "100%",
+              }}
+            >
               <Card
+                onClick={(e) => {
+                  setClearance(!clearance);
+                  setInitiate(false);
+                }}
+                style={{
+                  borderColor: clearance ? "#186ab4" : "#ccc",
+                  width: "100%",
+                  cursor: "pointer",
+                }}
                 bodyStyle={{ display: "flex", alignItems: "center" }}
-                style={{ width: "100%" }}
               >
                 <Avatar size="large" />
                 &nbsp;&nbsp;&nbsp;&nbsp;
@@ -153,6 +230,28 @@ const Check = () => {
                   <small>{trackingDataDesktop[0].date}</small>
                 </div>
               </Card>
+              {clearance ? (
+                <Card
+                  style={{
+                    height: "30vh",
+                    display: window.innerWidth > 600 ? "none" : "block",
+                    borderColor: "#186ab4",
+                    borderWidth: "0px 1px 1px 1px",
+                  }}
+                >
+                  <div
+                    style={{
+                      fontSize: "20px",
+                      fontWeight: "bold",
+                      color: "#186ab4",
+                    }}
+                  >
+                    Clearance Details
+                  </div>
+                </Card>
+              ) : (
+                ""
+              )}
               <div
                 style={{
                   display: "flex",
@@ -204,7 +303,8 @@ const Check = () => {
           <div
             style={{
               position: "fixed",
-              right: "20vw",
+              right: window.innerWidth > 600 ? "20vw" : "",
+              left: window.innerWidth > 600 ? "" : "23vw",
               top: "25vh",
               bottom: "10vh",
               background: "#186AB4",
@@ -225,7 +325,11 @@ const Check = () => {
   return (
     <>
       <Row>
-        <Col span={16}>
+        <Col
+          sm={16}
+          sx={24}
+          style={{ display: window.innerWidth > 600 ? "block" : "none" }}
+        >
           <div
             style={{
               display: "flex",
@@ -272,9 +376,12 @@ const Check = () => {
               }
             />
           </div>
+          <Divider style={{ margin: "0px" }} />
+          <div>{conditionalLeftView()}</div>
         </Col>
         <Col
-          span={8}
+          sm={8}
+          sx={24}
           style={{
             display: "flex",
             flexDirection: "column",
