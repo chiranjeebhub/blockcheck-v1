@@ -601,7 +601,7 @@ const Home = () => {
 
                       <div
                         // onClick={(e) => dummyFun(item._id)}
-                        onClick={(e) => history.push(`/checks/${item._id}`)}
+                        onClick={(e) => history.push(`/${item._id}`)}
                         style={{
                           width: "100%",
                           padding: "20px",
@@ -635,7 +635,7 @@ const Home = () => {
 
                       <div
                         // onClick={(e) => dummyFun(item._id)}
-                        onClick={(e) => history.push(`/checks/${item._id}`)}
+                        onClick={(e) => history.push(`/${item._id}`)}
                         style={{
                           width: "100%",
                           padding: "20px",
@@ -692,7 +692,7 @@ const Home = () => {
             &nbsp;&nbsp;&nbsp;&nbsp;
             <div
               onClick={(e) => {
-                history.push(`/checks/${trackingDataDesktop[0]._id}`);
+                history.push(`/${trackingDataDesktop[0]._id}`);
               }}
             >
               <img

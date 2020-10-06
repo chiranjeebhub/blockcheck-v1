@@ -1,8 +1,22 @@
 import React, { useState, useEffect, useRef } from "react";
-import { Row, Col, Input, Icon, Tooltip, Card, Avatar, Divider } from "antd";
+import {
+  Row,
+  Col,
+  Input,
+  Icon,
+  Tooltip,
+  Card,
+  Avatar,
+  Divider,
+  Typography,
+  Collapse,
+} from "antd";
 import { useHistory } from "react-router-dom";
 import Axios from "axios";
 import Loading from "../lotties/LoadingAnimation";
+
+const { Paragraph } = Typography;
+const { Panel } = Collapse;
 
 const Check = () => {
   const chkNumberRef = useRef();
@@ -45,17 +59,237 @@ const Check = () => {
   const conditionalLeftView = () => {
     if (initiate && !clearance) {
       return (
-        <div style={{ padding: "30px 50px" }}>
+        <>
           <div
             style={{
-              fontSize: "25px",
-              fontWeight: "bold",
-              color: "#186AB4",
+              padding: "30px 50px",
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
             }}
           >
-            Initiation Details
+            <div
+              style={{
+                fontSize: "25px",
+                fontWeight: "bold",
+                color: "#186AB4",
+              }}
+            >
+              Initiation Details
+            </div>
+            <div style={{ fontSize: "20px", color: "#186AB4" }}>
+              <span style={{ fontWeight: "700" }}>Modern</span> |{" "}
+              <span>Classic</span>
+            </div>
           </div>
-        </div>
+          <div
+            style={{ overflowY: "scroll", height: "60vh" }}
+            className="white-scroll"
+          >
+            <Collapse
+              accordion
+              // defaultActiveKey={["1"]}
+              style={{
+                background: "white",
+                margin: "30px 50px",
+                border: "slolid 1px white !important",
+              }}
+            >
+              <Panel
+                disabled
+                showArrow={false}
+                header={
+                  <div
+                    style={{
+                      padding: "20px",
+                      fontSize: "15px",
+                      fontWeight: 700,
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "space-between",
+                    }}
+                  >
+                    <div style={{ color: "#186AB4" }}>Check Type</div>
+                    <div style={{ color: "black" }}>Sender</div>
+                  </div>
+                }
+                key="1"
+                style={{
+                  marginBottom: 30,
+                  border: "solid 1px lightgray",
+                }}
+              ></Panel>
+              <Panel
+                showArrow={false}
+                header={
+                  <div
+                    style={{
+                      padding: "20px",
+                      fontSize: "15px",
+                      fontWeight: 700,
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "space-between",
+                    }}
+                  >
+                    <div style={{ color: "#186AB4" }}>About The Sender</div>
+                    <div style={{ color: "black" }}>Expand</div>
+                  </div>
+                }
+                key="2"
+                style={{
+                  marginBottom: 30,
+                  border: "solid 1px lightgray",
+                }}
+              >
+                <div style={{ padding: "30px" }}>Buy</div>
+              </Panel>
+              <Panel
+                showArrow={false}
+                header={
+                  <div
+                    style={{
+                      padding: "20px",
+                      fontSize: "15px",
+                      fontWeight: 700,
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "space-between",
+                    }}
+                  >
+                    <div style={{ color: "#186AB4" }}>Origination Details </div>
+                    <div style={{ color: "black" }}>Expand</div>
+                  </div>
+                }
+                key="3"
+                style={{
+                  marginBottom: 30,
+                  border: "solid 1px lightgray",
+                }}
+              >
+                <p>Buy</p>
+              </Panel>
+              <Panel
+                showArrow={false}
+                header={
+                  <div
+                    style={{
+                      padding: "20px",
+                      fontSize: "15px",
+                      fontWeight: 700,
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "space-between",
+                    }}
+                  >
+                    <div style={{ color: "#186AB4" }}>Intented Destination</div>
+                    <div style={{ color: "black" }}>Expand</div>
+                  </div>
+                }
+                key="4"
+                style={{
+                  marginBottom: 30,
+                  border: "solid 1px lightgray",
+                }}
+              >
+                <p>Buy</p>
+              </Panel>
+            </Collapse>
+          </div>
+          {/* <div
+            style={{
+              margin: "10px 50px",
+              height: "80px",
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              border: "0.5px solid #E7E7E7",
+              padding: "0px 20px",
+              fontSize: "15px",
+              fontWeight: 700,
+            }}
+          >
+            <div style={{ color: "#186AB4" }}>Check Type</div>
+            <div>Sender</div>
+          </div>
+          <div
+            style={{
+              margin: "20px 50px",
+              height: "80px",
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              border: "0.5px solid #E7E7E7",
+              padding: "0px 20px",
+              fontSize: "15px",
+              fontWeight: 700,
+            }}
+          >
+            <div style={{ color: "#186AB4" }}>About The Sender</div>
+            <div>Expand</div>
+          </div>
+          <div
+            style={{
+              margin: "20px 50px",
+              height: "80px",
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              border: "0.5px solid #E7E7E7",
+              padding: "0px 20px",
+              fontSize: "15px",
+              fontWeight: 700,
+            }}
+          >
+            <div style={{ color: "#186AB4" }}>Origination Details</div>
+            <div>Expand</div>
+          </div>
+          <div
+            style={{
+              margin: "20px 50px",
+              height: "80px",
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              border: "0.5px solid #E7E7E7",
+              padding: "0px 20px",
+              fontSize: "15px",
+              fontWeight: 700,
+            }}
+          >
+            <div style={{ color: "#186AB4" }}>Intented Destination</div>
+            <div>Expand</div>
+          </div>
+         */}
+
+          <Row>
+            <Col
+              span={16}
+              style={{
+                position: "fixed",
+                bottom: 0,
+                height: "60px",
+                background: "#186AB4",
+                color: "white",
+                fontSize: "15px",
+                fontWeight: "700",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <div style={{ paddingTop: "3px" }}>
+                Are You The Intended Recipient? Click Here To Cash This
+              </div>
+              &nbsp;&nbsp;
+              <img
+                src={require("../images/logo_white.svg")}
+                alt=""
+                // width="30px"
+              />
+            </Col>
+          </Row>
+        </>
       );
     } else if (!initiate && clearance) {
       return (
@@ -139,7 +373,7 @@ const Check = () => {
                   setClearance(false);
                 }}
                 style={{
-                  borderColor: initiate ? "#186ab4" : "#ccc",
+                  borderColor: initiate ? "#186ab4" : "#E7E7E7",
                   cursor: "pointer",
                 }}
                 bodyStyle={{
@@ -213,7 +447,7 @@ const Check = () => {
                   setInitiate(false);
                 }}
                 style={{
-                  borderColor: clearance ? "#186ab4" : "#ccc",
+                  borderColor: clearance ? "#186ab4" : "#E7E7E7",
                   width: "100%",
                   cursor: "pointer",
                 }}
@@ -345,9 +579,18 @@ const Check = () => {
                 alt=""
                 width="200px"
               />
-              <div style={{ fontSize: "15px", fontWeight: "600" }}>
-                Check# -{" "}
-                {window.location.href.split("\\").pop().split("/").pop()}
+              <div
+                style={{
+                  fontSize: "15px",
+                  fontWeight: "600",
+                  display: "flex",
+                  paddingTop: "7px",
+                }}
+              >
+                <div>Check# -&nbsp;</div>
+                <Paragraph copyable>
+                  {window.location.href.split("\\").pop().split("/").pop()}
+                </Paragraph>
               </div>
             </div>
 
